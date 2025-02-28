@@ -1,1 +1,0 @@
-web: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt && gunicorn items.wsgi --bind 0.0.0.0:$PORT
