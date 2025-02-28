@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # Thu gọn static files
-RUN python manage.py collectstatic --noinput
+RUN pip install -r requirements.txt && python manage.py collectstatic --noinput
 
 # Chạy migrate, tạo superuser rồi chạy Gunicorn
 CMD python manage.py migrate && gunicorn items.wsgi:application --bind 0.0.0.0:$PORT
