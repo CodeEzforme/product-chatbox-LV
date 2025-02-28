@@ -1,26 +1,20 @@
-# Sử dụng Python 3.10 thay vì 3.12
+# Sử dụng Python 3.10 làm base image
 FROM python:3.10
 
-# Cập nhật hệ thống và cài đặt thư viện cần thiết
-RUN apt-get update && apt-get install -y \
-    python3-distutils \
-    build-essential \
-    libssl-dev \
-    libffi-dev \
-    python3-dev \
-    gcc \
-    g++ \
-    make
-
-# Thiết lập thư mục làm việc
+# Đặt thư mục làm việc trong container
 WORKDIR /app
 
 # Copy toàn bộ mã nguồn vào container
-COPY . .
+COPY . /app/
 
-# Cài đặt các package trong requirements.txt mà không dùng venv
-RUN pip install --upgrade pip setuptools wheel
-RUN pip install -r requirements.txt
+# Cài đặt dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Chạy ứng dụng với Gunicorn
-CMD gunicorn items.wsgi --bind 0.0.0.0:$PORT
+# Chạy lệnh migrate để cập nhật database
+RUN python manage.py migrate
+
+# Expose cổng 8000
+EXPOSE 8000
+
+# Chạy Gunicorn để serve Django app
+CMD ["gunicorn", "items.wsgi:application", "--bind", "0.0.0.0:8000"]
