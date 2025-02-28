@@ -1,0 +1,22 @@
+# Bỏ qua môi trường ảo
+.venv/
+venv/
+
+# Bỏ qua file database SQLite (nếu dùng PostgreSQL thì có thể bỏ qua dòng này)
+db.sqlite3
+
+# Bỏ qua file dữ liệu
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# Bỏ qua thư mục media và static nếu lưu trữ trên Cloud
+media/
+static/
+
+# VS Code files
+.vscode/
+
+#bỏ qua thư mục chưa dữ liệu
+data/
