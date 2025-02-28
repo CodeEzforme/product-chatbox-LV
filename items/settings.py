@@ -156,31 +156,20 @@
 
 # deloy////////////////////////////////////////////////////////
 
-
-"""
-Django settings for items project.
-"""
-
-import os
 import dj_database_url
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load biến môi trường từ Railway hoặc đặt giá trị mặc định
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-default-secret-key")
-
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# Chỉ cho phép truy cập API từ domain chính của website
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
-# Application definition
 INSTALLED_APPS = [
-    "corsheaders",  # Thêm vào đây
+    "corsheaders",
     "rest_framework",
-    "corsheaders",  # Hỗ trợ CORS
     "items",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -191,8 +180,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # Thêm vào đây
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -201,15 +191,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# Cấu hình CORS: Chỉ cho phép gọi API từ chính website
-CORS_ALLOWED_ORIGINS = [
-    "https://chaluatungloan.food",
-    "https://www.chaluatungloan.food",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOW_CREDENTIALS = True  # Hỗ trợ cookies nếu cần
-
-# Cấu hình URL chính
 ROOT_URLCONF = "items.urls"
 
 TEMPLATES = [
@@ -228,57 +211,16 @@ TEMPLATES = [
     },
 ]
 
-# Chạy WebSocket qua ASGI thay vì WSGI
-ASGI_APPLICATION = "items.asgi.application"
+WSGI_APPLICATION = "items.wsgi.application"
 
-# Cấu hình WebSocket với Redis
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [os.getenv("REDIS_URL", "redis://localhost:6379")],
-        },
-    },
-}
-
-# Cấu hình Database: Dùng PostgreSQL trên Railway, nếu không có thì fallback về SQLite
+# Cấu hình PostgreSQL từ Render
 DATABASES = {
-    "default": dj_database_url.config(default=f"sqlite:///{BASE_DIR}/db.sqlite3")
+    "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
-# Hỗ trợ giao dịch tự động
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
-
-# Cấu hình bộ nhớ cache với Redis (nếu có)
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1"),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-    }
-}
-
-# Cấu hình xác thực mật khẩu
-AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
-
-# Internationalization
-LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
-USE_I18N = True
-USE_TZ = True
-
-# Cấu hình Static Files (cho Railway hoặc Cloud)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Cấu hình Media Files (nếu lưu trữ ảnh, video, v.v.)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
