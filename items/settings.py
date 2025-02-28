@@ -26,7 +26,10 @@ SECRET_KEY = 'django-insecure-@e00lg41!p_ty@9x^e36j)q-x5lz!o4#csj$lsoj%q&tyxn5cj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = False
+ALLOWED_HOSTS = [
+    "www.chaluatungloan.food",  # Thêm domain của bạn
+    "chaluatungloan.food",
+]
 
 
 # Application definition
@@ -58,7 +61,7 @@ ROOT_URLCONF = 'items.urls'
 # CORS_ALLOW_ALL_ORIGINS = True #box-chat
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Frontend local
-    "https://your-frontend-domain.com",  # Khi deploy
+    # "https://your-frontend-domain.com",  # Khi deploy
     "chaluatungloan.food",
     "https://www.chaluatungloan.food",
 ]
