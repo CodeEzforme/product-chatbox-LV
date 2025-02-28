@@ -174,15 +174,11 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-default-secret-key")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 # Chỉ cho phép truy cập API từ domain chính của website
-ALLOWED_HOSTS = [
-    "chaluatungloan.food",
-    "www.chaluatungloan.food",
-]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 INSTALLED_APPS = [
-    "daphne",  # Sử dụng Daphne cho WebSocket
-    "channels",  # Django Channels để chạy WebSocket
+    "corsheaders",  # Thêm vào đây
     "rest_framework",
     "corsheaders",  # Hỗ trợ CORS
     "items",
@@ -195,7 +191,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # Hỗ trợ CORS
+    "corsheaders.middleware.CorsMiddleware",  # Thêm vào đây
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
