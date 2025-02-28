@@ -15,4 +15,4 @@ COPY . /app/
 RUN python manage.py collectstatic --noinput
 
 # Chạy migrate, tạo superuser rồi chạy Gunicorn
-CMD python manage.py migrate && python items/create_admin.py && gunicorn items.wsgi:application --bind 0.0.0.0:$PORT
+CMD python manage.py migrate && gunicorn items.wsgi:application --bind 0.0.0.0:$PORT
