@@ -1,1 +1,1 @@
-web: daphne -b 0.0.0.0 -p $PORT items.asgi:application
+web: gunicorn items.wsgi --bind 0.0.0.0:$PORT
